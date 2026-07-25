@@ -1,36 +1,42 @@
 # Coffer
 
-Coffer is a cross-platform desktop application for protecting local files with a separate unlock key. Its version-one backend uses the documented authenticated container format and performs protection and restoration locally.
+Coffer is a local-first desktop application for protecting files with a separate unlock key. Protection and restoration happen on-device using the documented authenticated container format. There is no account, cloud sync, or recovery backdoor.
 
-Version 1.0.0 is the first stable format release. Download archives for Windows, Linux, and macOS from [GitHub Releases](https://github.com/remypicciano/coffer/releases). Release archives include SHA-256 checksums; builds are currently unsigned, so verify the checksum and repository provenance before use.
+Version 1.0.0 is the first stable release. Download release archives from [GitHub Releases](https://github.com/remypicciano/coffer/releases) and verify the included SHA-256 checksum before use.
 
-Visit the [Coffer project site](https://remypicciano.github.io/coffer/) for an overview of the security model, format, platform builds, and v2 roadmap.
+Visit the [project site](https://remypicciano.github.io/coffer/) for the security model, platform builds, and format roadmap.
 
-> **Carrier-file warning for the planned v2 feature:** an image or other file used as a key carrier must remain byte-for-byte identical. Send it with **Attach file** or **Send as document**. Do not paste it inline and do not use a chat application's normal photo-sharing button; those options commonly compress or rewrite the file, and the received copy will not unlock the container.
+## Usage
 
-## Development
+1. Run the app with `cargo run`.
+2. Choose a file to protect.
+3. Save the generated container and unlock key in separate places.
+4. Use the matching key to open the container later.
 
-Requirements:
+For the public-facing workflow and contact details, see [the site contact page](https://remypicciano.github.io/coffer/contact.html).
 
-- Rust toolchain with edition 2024 support
-- Platform dependencies required by `eframe` and `rfd`
+## Developer conventions
 
-Run the application:
+- Use a focused branch for any change set.
+- Keep commits intentional and concise.
+- Update docs and the site together when behavior or messaging changes.
+- Never commit real keys, containers, plaintext samples, credentials, logs, or generated binaries.
+- Prefer synthetic fixtures for tests and examples.
+- Use these checks before opening a change:
 
 ```sh
-cargo run
-```
-
-Verify changes:
-
-```sh
-cargo fmt -- --check
-cargo test
-cargo clippy --all-targets --all-features -- -D warnings
+cargo fmt --all -- --check
+cargo test --locked
+cargo clippy --locked --all-targets --all-features -- -D warnings
 cargo audit
+python3 tools/check_docs.py
+python3 tools/check_site.py
+python3 -m py_compile tools/*.py
 ```
 
-## macOS release build
+## Build notes
+
+### macOS
 
 ```sh
 cargo build --release
@@ -38,22 +44,14 @@ cp target/release/coffer dist/macos/Coffer.app/Contents/MacOS/coffer
 open dist/macos/Coffer.app
 ```
 
-The **macOS build** workflow publishes Intel and Apple Silicon archives. The local `dist/` directory is intentionally excluded from Git.
-
-## Windows x64 build
-
-An ARM Windows virtual machine may select the ARM64 target automatically. To build for conventional x64 Windows:
+### Windows x64
 
 ```sh
 rustup target add x86_64-pc-windows-msvc
 cargo build --release --target x86_64-pc-windows-msvc
 ```
 
-The repository's **Windows build** GitHub Actions workflow produces a downloadable `coffer-windows-x86_64` ZIP containing `coffer-windows-x86_64.exe` and a SHA-256 checksum.
-
-## Linux x64 build
-
-On Debian, Ubuntu, or Kali Linux:
+### Linux x64
 
 ```sh
 sudo apt update
@@ -62,23 +60,31 @@ cargo build --locked --release
 ./target/release/coffer
 ```
 
-The repository's **Linux build** GitHub Actions workflow produces downloadable `coffer-linux-x86_64` and `coffer-linux-aarch64` archives on native GitHub-hosted runners. It can be started manually from the repository's **Actions** tab.
+## Repository map
 
-## Project documentation
-
-- [Container format proposal](docs/coffer-format-v1.md)
-- [Version 2 review draft](docs/coffer-format-v2.md)
-- [Complete feature catalog](docs/features.md)
-- [Cross-platform recovery and decryption](docs/recovery.md)
-- [Product roadmap](docs/roadmap.md)
-- [Key-carrier safety](docs/key-carrier-safety.md)
-- [Security audit notes](docs/security-audit.md)
-- [Threat model](docs/threat-model.md)
-- [Development and repository hygiene](docs/development.md)
+- [Application source](src/)
+- [Site](site/)
+- [Docs](docs/)
+- [Workflow helpers](tools/)
 - [Security policy](SECURITY.md)
 - [Support policy](SUPPORT.md)
 - [Contributing](CONTRIBUTING.md)
-- [Public repository readiness](docs/public-readiness.md)
+- [Public readiness review](docs/public-readiness.md)
+
+## Name ideas
+
+If you ever want to rebrand the repository, these are stronger and more distinctive options than a generic product name:
+
+- Vaultline
+- SplitKey
+- KeyHarbor
+- Latchroom
+- CipherDock
+- AnchorVault
+- Lockframe
+- SafeSep
+- StorePair
+- HarborKey
 
 ## Security and license
 
