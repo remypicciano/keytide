@@ -50,6 +50,16 @@ h1 em { color: var(--accent); font-family: inherit; font-weight: 760; }
 .button-secondary:hover { background: var(--paper-strong); }
 .release-note { max-width: 610px; margin: 22px 0 0; color: var(--muted); font-size: .75rem; }
 
+.contact-card { padding: 28px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-strong); box-shadow: 0 32px 80px rgba(41, 46, 40, .12); }
+.contact-card h2 { margin-bottom: 10px; font-size: 1.45rem; line-height: 1.05; }
+.contact-card > p { color: var(--muted); font-size: .98rem; }
+.contact-list { margin: 22px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--line); }
+.contact-row { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.contact-label { color: var(--muted); font: 700 .68rem/1 "SFMono-Regular", Consolas, monospace; letter-spacing: .1em; text-transform: uppercase; }
+.contact-row a { text-decoration: none; font-weight: 700; }
+.contact-row a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.contact-meta { margin-top: 18px; color: var(--muted); font-size: .78rem; }
+
 .artifact { position: relative; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-strong); box-shadow: 0 32px 80px rgba(41, 46, 40, .12); transform: rotate(1.2deg); }
 .artifact-label { margin-bottom: 38px; color: var(--muted); font: 700 .68rem/1 "SFMono-Regular", Consolas, monospace; letter-spacing: .12em; text-transform: uppercase; }
 .source-file { position: relative; width: 75%; margin: auto; padding: 35px 28px 28px; border: 1px solid var(--ink); border-radius: var(--radius); background: white; }
@@ -142,6 +152,7 @@ footer nav { justify-content: flex-end; }
   .hero, .security, .format-grid, .roadmap { grid-template-columns: 1fr; }
   .hero { padding-top: 70px; }
   .artifact { width: min(100%, 600px); margin-inline: auto; }
+  .contact-card { width: min(100%, 600px); margin-inline: auto; }
   .proof-strip { grid-template-columns: 1fr 1fr; }
   .proof-strip div:nth-child(2) { border-right: 0; }
   .proof-strip div:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
@@ -160,6 +171,7 @@ footer nav { justify-content: flex-end; }
   h1 { font-size: clamp(3rem, 15vw, 4.6rem); }
   .hero-actions { align-items: stretch; flex-direction: column; }
   .button { width: 100%; }
+  .contact-row { grid-template-columns: 1fr; gap: 6px; }
   .artifact { padding: 14px; }
   .artifact-label { margin-bottom: 24px; }
   .source-file { width: 92%; padding: 28px 20px 22px; }
