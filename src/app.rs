@@ -11,7 +11,7 @@ use std::sync::{
 use std::time::Duration;
 
 use crate::coffer::{
-    CofferError, ProtectRequest, ProtectResult, RestoreRequest, RestoreResult, protect_file,
+    KeyTideError, ProtectRequest, ProtectResult, RestoreRequest, RestoreResult, protect_file,
     restore_file,
 };
 
@@ -110,7 +110,7 @@ impl SelectedFile {
     }
 }
 
-pub struct CofferApp {
+pub struct KeyTideApp {
     pub theme_mode: ThemeMode,
     pub show_splash: bool,
     pub splash_started_at: Option<f64>,
@@ -142,8 +142,8 @@ pub struct CofferApp {
 }
 
 enum OperationOutcome {
-    Protected(Result<ProtectResult, CofferError>),
-    Restored(Result<RestoreResult, CofferError>),
+    Protected(Result<ProtectResult, KeyTideError>),
+    Restored(Result<RestoreResult, KeyTideError>),
 }
 
 struct OperationControl {
@@ -160,7 +160,7 @@ impl Drop for OperationControl {
     }
 }
 
-impl Default for CofferApp {
+impl Default for KeyTideApp {
     fn default() -> Self {
         Self {
             theme_mode: ThemeMode::Light,
@@ -195,7 +195,7 @@ impl Default for CofferApp {
     }
 }
 
-impl CofferApp {
+impl KeyTideApp {
     pub fn dismiss_splash(&mut self) {
         self.show_splash = false;
         self.splash_started_at = None;
@@ -298,7 +298,7 @@ impl CofferApp {
 
     pub fn select_encrypted_file(&mut self) {
         if let Some(path) = FileDialog::new()
-            .add_filter("Coffer protected files", &["coffer"])
+            .add_filter("KeyTide protected files", &["coffer"])
             .pick_file()
         {
             self.encrypted_file = Some(SelectedFile::from_path(path));
@@ -310,7 +310,7 @@ impl CofferApp {
 
     pub fn select_key(&mut self) {
         if let Some(path) = FileDialog::new()
-            .add_filter("Coffer keys", &["cofferkey"])
+            .add_filter("KeyTide keys", &["cofferkey"])
             .pick_file()
         {
             self.key_file = Some(SelectedFile::from_path(path));
@@ -715,7 +715,7 @@ impl CofferApp {
     }
 }
 
-impl eframe::App for CofferApp {
+impl eframe::App for KeyTideApp {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         let ctx = ui.ctx().clone();
         crate::ui::theme::apply_visuals(&ctx, self.theme_mode == ThemeMode::Light);
@@ -738,7 +738,7 @@ fn smoothstep(value: f32) -> f32 {
     value * value * (3.0 - 2.0 * value)
 }
 
-fn assign_open_drop(app: &mut CofferApp, path: PathBuf) {
+fn assign_open_drop(app: &mut KeyTideApp, path: PathBuf) {
     let extension = path
         .extension()
         .and_then(|extension| extension.to_str())
@@ -848,7 +848,7 @@ mod tests {
         }
     }
 
-    fn wait_for_operation(app: &mut CofferApp) {
+    fn wait_for_operation(app: &mut KeyTideApp) {
         let context = egui::Context::default();
         let deadline = Instant::now() + Duration::from_secs(5);
         while app.operation_receiver.is_some() && Instant::now() < deadline {
@@ -863,7 +863,7 @@ mod tests {
 
     #[test]
     fn navigation_preserves_selected_files() {
-        let mut app = CofferApp {
+        let mut app = KeyTideApp {
             source_file: Some(selected("notes.txt")),
             ..Default::default()
         };
@@ -874,7 +874,7 @@ mod tests {
 
     #[test]
     fn protect_requires_explicit_review_transition() {
-        let mut app = CofferApp {
+        let mut app = KeyTideApp {
             source_file: Some(selected("notes.txt")),
             ..Default::default()
         };
@@ -885,7 +885,7 @@ mod tests {
 
     #[test]
     fn open_requires_both_files_before_review() {
-        let mut app = CofferApp {
+        let mut app = KeyTideApp {
             encrypted_file: Some(selected("notes.coffer")),
             ..Default::default()
         };
@@ -904,7 +904,7 @@ mod tests {
 
     #[test]
     fn protect_output_requires_safe_coffer_filename() {
-        let mut app = CofferApp {
+        let mut app = KeyTideApp {
             source_file: Some(selected("notes.txt")),
             ..Default::default()
         };
@@ -919,7 +919,7 @@ mod tests {
 
     #[test]
     fn cancelling_processing_returns_to_review() {
-        let mut app = CofferApp {
+        let mut app = KeyTideApp {
             workflow: Workflow::Protect,
             source_file: Some(selected("notes.txt")),
             ..Default::default()
@@ -933,7 +933,7 @@ mod tests {
 
     #[test]
     fn splash_fades_in_holds_and_fades_out() {
-        let app = CofferApp {
+        let app = KeyTideApp {
             splash_started_at: Some(10.0),
             ..Default::default()
         };
@@ -949,7 +949,7 @@ mod tests {
         let directory = tempfile::tempdir().unwrap();
         let source_path = directory.path().join("notes.txt");
         fs::write(&source_path, "private notes").unwrap();
-        let mut app = CofferApp {
+        let mut app = KeyTideApp {
             workflow: Workflow::Protect,
             source_file: Some(SelectedFile::from_path(source_path)),
             protect_destination: Some(directory.path().to_path_buf()),

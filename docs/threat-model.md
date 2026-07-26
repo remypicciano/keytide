@@ -1,4 +1,4 @@
-# Coffer threat model
+# KeyTide threat model
 
 Last reviewed: July 13, 2026
 
@@ -14,7 +14,7 @@ This document defines the security boundary for stable format v1 and the review 
 
 ## Trust boundary
 
-Coffer trusts the local operating system, cryptographic random source, process isolation, Rust toolchain, reviewed dependencies, and release pipeline while they are operating correctly. File and carrier contents, filenames, containers, keys, output paths, environment variables, and removable media are untrusted inputs.
+KeyTide trusts the local operating system, cryptographic random source, process isolation, Rust toolchain, reviewed dependencies, and release pipeline while they are operating correctly. File and carrier contents, filenames, containers, keys, output paths, environment variables, and removable media are untrusted inputs.
 
 The network is not inside the runtime security boundary. Core protection and restoration do not require an account or network connection. GitHub is part of source distribution and release provenance, not file processing.
 

@@ -1,8 +1,8 @@
 {
-  "name": "Coffer",
-  "short_name": "Coffer",
+  "name": "KeyTide",
+  "short_name": "KeyTide",
   "description": "Local-first authenticated file protection",
-  "start_url": "/coffer/",
+  "start_url": "/keytide/",
   "display": "standalone",
   "background_color": "#f2f1eb",
   "theme_color": "#131713"

@@ -1,6 +1,6 @@
-# Contributing to Coffer
+# Contributing to KeyTide
 
-Thank you for helping improve Coffer. Changes to cryptography, parsing, key handling, filesystem commits, or container compatibility require especially careful review and tests.
+Thank you for helping improve KeyTide. Changes to cryptography, parsing, key handling, filesystem commits, or container compatibility require especially careful review and tests.
 
 ## Before opening a change
 

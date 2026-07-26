@@ -4,7 +4,7 @@ mod ui;
 
 fn main() {
     init_logging();
-    tracing::info!("Coffer starting");
+    tracing::info!("KeyTide starting");
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([1200.0, 820.0])
@@ -15,7 +15,7 @@ fn main() {
     };
 
     let result = eframe::run_native(
-        "Coffer",
+        "KeyTide",
         options,
         Box::new(|cc| {
             let ctx = &cc.egui_ctx;
@@ -44,13 +44,13 @@ fn main() {
 
             ctx.set_global_style(style);
 
-            Ok(Box::new(app::CofferApp::default()))
+            Ok(Box::new(app::KeyTideApp::default()))
         }),
     );
     match result {
-        Ok(()) => tracing::info!("Coffer closed normally"),
+        Ok(()) => tracing::info!("KeyTide closed normally"),
         Err(error) => {
-            tracing::error!(error = %error, "Coffer stopped unexpectedly");
+            tracing::error!(error = %error, "KeyTide stopped unexpectedly");
             std::process::exit(1);
         }
     }
@@ -59,7 +59,7 @@ fn main() {
 fn init_logging() {
     use tracing_subscriber::EnvFilter;
     let filter =
-        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("coffer=info"));
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("keytide=info"));
     let _ = tracing_subscriber::fmt()
         .with_env_filter(filter)
         .with_target(false)

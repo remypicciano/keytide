@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portable recovery utility for Coffer v1 containers."""
+"""Portable recovery utility for KeyTide v1 containers."""
 
 from __future__ import annotations
 
@@ -33,21 +33,21 @@ def parse_key(data: bytes) -> bytes:
         or data[9] != ALGORITHM_AES_256_GCM
         or data[10:12] != b"\x00\x00"
     ):
-        raise RecoveryError("invalid or unsupported Coffer key")
+        raise RecoveryError("invalid or unsupported KeyTide key")
     return data[12:44]
 
 
 def decrypt_container(container: bytes, key: bytes) -> tuple[str, bytes]:
     if len(container) < PREFIX_LEN or container[:8] != CONTAINER_MAGIC:
-        raise RecoveryError("invalid Coffer container")
+        raise RecoveryError("invalid KeyTide container")
     if container[8] != VERSION or container[9] != ALGORITHM_AES_256_GCM:
-        raise RecoveryError("unsupported Coffer version or algorithm")
+        raise RecoveryError("unsupported KeyTide version or algorithm")
 
     prefix = container[:PREFIX_LEN]
     ciphertext_length = struct.unpack(">Q", prefix[22:30])[0]
     ciphertext = container[PREFIX_LEN:]
     if ciphertext_length < 16 or ciphertext_length != len(ciphertext):
-        raise RecoveryError("invalid Coffer container length")
+        raise RecoveryError("invalid KeyTide container length")
 
     try:
         payload = AESGCM(key).decrypt(prefix[10:22], ciphertext, prefix)
@@ -76,7 +76,7 @@ def decrypt_container(container: bytes, key: bytes) -> tuple[str, bytes]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Decrypt a Coffer v1 container without the GUI")
+    parser = argparse.ArgumentParser(description="Decrypt a KeyTide v1 container without the GUI")
     parser.add_argument("container", type=Path, help="path to the .coffer container")
     parser.add_argument("key", type=Path, help="path to the matching .cofferkey file")
     parser.add_argument(

@@ -1,11 +1,11 @@
 use eframe::egui;
 
-use crate::app::CofferApp;
+use crate::app::KeyTideApp;
 use crate::ui::theme;
 
 const VIEWER_ID: &str = "coffer_secure_viewer";
 
-pub fn show(app: &mut CofferApp, ctx: &egui::Context) {
+pub fn show(app: &mut KeyTideApp, ctx: &egui::Context) {
     if !app.show_viewer {
         app.viewer_was_open = false;
         return;
@@ -27,7 +27,7 @@ pub fn show(app: &mut CofferApp, ctx: &egui::Context) {
     let mut close_and_wipe = false;
 
     let mut builder = egui::ViewportBuilder::default()
-        .with_title("Coffer Secure Viewer")
+        .with_title("KeyTide Secure Viewer")
         .with_min_inner_size([620.0, 480.0])
         .with_resizable(true);
 
@@ -66,7 +66,7 @@ pub fn show(app: &mut CofferApp, ctx: &egui::Context) {
                 )
                 .show_inside(viewer_ui, |ui| {
                     ui.label(
-                        egui::RichText::new("Closing clears Coffer’s in-memory preview buffer.")
+                        egui::RichText::new("Closing clears KeyTide’s in-memory preview buffer.")
                             .small()
                             .color(theme::text_secondary()),
                     );
