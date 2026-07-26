@@ -690,7 +690,11 @@ fn inline_notice(ui: &mut egui::Ui, title: &str, body: &str, color: egui::Color3
 }
 
 fn processing(app: &mut KeyTideApp, ui: &mut egui::Ui, title: &str) {
-    page_intro(ui, title, "Keep KeyTide open while this operation finishes.");
+    page_intro(
+        ui,
+        title,
+        "Keep KeyTide open while this operation finishes.",
+    );
     egui::Frame::new()
         .fill(theme::surface())
         .stroke(egui::Stroke::new(1.0_f32, theme::border()))
