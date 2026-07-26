@@ -95,7 +95,7 @@ Created by [Rémy Picciano](https://github.com/remypicciano). KeyTide reflects a
 
 ## Contact
 
-- Email: [remypicciano@icloud.com](mailto:remypicciano@icloud.com)
+- Email: [remypicciano@icloud.com](mailto:remypicciano@gmail.com)
 - GitHub: [github.com/remypicciano](https://github.com/remypicciano)
 - Project discussions: [open a GitHub issue](https://github.com/remypicciano/keytide/issues)
 - Security issues: use [private vulnerability reporting](https://github.com/remypicciano/keytide/security/advisories/new)
