@@ -1,9 +1,9 @@
 use eframe::egui;
 
-use crate::app::{CofferApp, NoticeKind, OpenStage, ProtectStage, ThemeMode, Workflow};
+use crate::app::{KeyTideApp, NoticeKind, OpenStage, ProtectStage, ThemeMode, Workflow};
 use crate::ui::{theme, widgets};
 
-pub fn show_splash(app: &mut CofferApp, ui: &mut egui::Ui) {
+pub fn show_splash(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     let ctx = ui.ctx().clone();
     let now = ctx.input(|input| input.time);
     let opacity = app.splash_opacity(now);
@@ -64,7 +64,7 @@ pub fn show_splash(app: &mut CofferApp, ui: &mut egui::Ui) {
             ui.painter().text(
                 center + egui::vec2(0.0, 116.0),
                 egui::Align2::CENTER_CENTER,
-                "Coffer",
+                "KeyTide",
                 egui::FontId::proportional(38.0),
                 tint(egui::Color32::WHITE),
             );
@@ -89,7 +89,7 @@ fn smooth_out(value: f32) -> f32 {
     1.0 - (1.0 - value.clamp(0.0, 1.0)).powi(3)
 }
 
-pub fn show(app: &mut CofferApp, ui: &mut egui::Ui) {
+pub fn show(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     let ctx = ui.ctx().clone();
     let compact = ctx.input(|input| input.content_rect().width()) < 980.0;
 
@@ -118,7 +118,7 @@ pub fn show(app: &mut CofferApp, ui: &mut egui::Ui) {
         .show_inside(ui, |ui| content(app, ui, compact));
 }
 
-fn header(app: &mut CofferApp, ui: &mut egui::Ui, compact: bool) {
+fn header(app: &mut KeyTideApp, ui: &mut egui::Ui, compact: bool) {
     ui.horizontal(|ui| {
         ui.add(
             egui::Image::new(egui::include_image!("../../assets/Pastelito_img.webp"))
@@ -127,7 +127,7 @@ fn header(app: &mut CofferApp, ui: &mut egui::Ui, compact: bool) {
         );
         ui.add_space(10.0);
         ui.label(
-            egui::RichText::new("Coffer")
+            egui::RichText::new("KeyTide")
                 .size(18.0)
                 .strong()
                 .color(theme::text_primary()),
@@ -146,7 +146,7 @@ fn header(app: &mut CofferApp, ui: &mut egui::Ui, compact: bool) {
     });
 }
 
-fn nav_button(app: &mut CofferApp, ui: &mut egui::Ui, workflow: Workflow, label: &str) {
+fn nav_button(app: &mut KeyTideApp, ui: &mut egui::Ui, workflow: Workflow, label: &str) {
     let selected = app.workflow == workflow;
     let response = ui.add_sized(
         [82.0, 38.0],
@@ -175,7 +175,7 @@ fn nav_button(app: &mut CofferApp, ui: &mut egui::Ui, workflow: Workflow, label:
     }
 }
 
-fn theme_switch(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn theme_switch(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     let dark = app.theme_mode == ThemeMode::Dark;
     let desired = egui::Vec2::new(122.0, 36.0);
     let (rect, response) = ui.allocate_exact_size(desired, egui::Sense::click());
@@ -230,7 +230,7 @@ fn theme_switch(app: &mut CofferApp, ui: &mut egui::Ui) {
     response.on_hover_text("Change application appearance");
 }
 
-fn content(app: &mut CofferApp, ui: &mut egui::Ui, compact: bool) {
+fn content(app: &mut KeyTideApp, ui: &mut egui::Ui, compact: bool) {
     let inset = if compact { 18.0 } else { 32.0 };
     let width = (ui.available_width() - inset * 2.0).clamp(0.0, 1360.0);
     let offset = ((ui.available_width() - width) * 0.5).max(0.0);
@@ -248,7 +248,7 @@ fn content(app: &mut CofferApp, ui: &mut egui::Ui, compact: bool) {
     });
 }
 
-fn workflow_shell(app: &mut CofferApp, ui: &mut egui::Ui, compact: bool) {
+fn workflow_shell(app: &mut KeyTideApp, ui: &mut egui::Ui, compact: bool) {
     egui::ScrollArea::vertical()
         .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysHidden)
         .auto_shrink([false, false])
@@ -279,7 +279,7 @@ fn workflow_shell(app: &mut CofferApp, ui: &mut egui::Ui, compact: bool) {
         });
 }
 
-fn workflow_rail(app: &CofferApp, ui: &mut egui::Ui) {
+fn workflow_rail(app: &KeyTideApp, ui: &mut egui::Ui) {
     let (title, description) = match app.workflow {
         Workflow::Protect => (
             "Protect",
@@ -410,7 +410,7 @@ fn rail_step(ui: &mut egui::Ui, label: &str, index: usize, active: usize) {
     );
 }
 
-fn compact_progress(app: &CofferApp, ui: &mut egui::Ui) {
+fn compact_progress(app: &KeyTideApp, ui: &mut egui::Ui) {
     let (active, labels): (usize, &[&str]) = match app.workflow {
         Workflow::Protect => (
             protect_stage_index(app.protect_stage),
@@ -425,7 +425,7 @@ fn compact_progress(app: &CofferApp, ui: &mut egui::Ui) {
     widgets::workflow_steps(ui, active, labels);
 }
 
-fn workflow_content(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn workflow_content(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     match app.workflow {
         Workflow::Protect => protect_page(app, ui),
         Workflow::Open => open_page(app, ui),
@@ -449,7 +449,7 @@ fn page_intro(ui: &mut egui::Ui, title: &str, description: &str) {
     ui.add_space(28.0);
 }
 
-fn protect_page(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn protect_page(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     match app.protect_stage {
         ProtectStage::SelectFile => protect_select(app, ui),
         ProtectStage::Review => protect_review(app, ui),
@@ -458,11 +458,11 @@ fn protect_page(app: &mut CofferApp, ui: &mut egui::Ui) {
     }
 }
 
-fn protect_select(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn protect_select(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     page_intro(
         ui,
         "Choose a file",
-        "The original remains unchanged. Coffer creates a protected copy.",
+        "The original remains unchanged. KeyTide creates a protected copy.",
     );
     match app.source_file.as_ref() {
         None => {
@@ -481,14 +481,14 @@ fn protect_select(app: &mut CofferApp, ui: &mut egui::Ui) {
             inline_notice(
                 ui,
                 "Fresh key for this file",
-                "Coffer will create a new random .cofferkey. Every protected file receives its own key so one lost or exposed key cannot unlock your other files.",
+                "KeyTide will create a new random .cofferkey. Every protected file receives its own key so one lost or exposed key cannot unlock your other files.",
                 theme::primary(),
             );
         }
     }
 }
 
-fn protect_review(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn protect_review(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     page_intro(
         ui,
         "Review and save",
@@ -519,7 +519,7 @@ fn protect_review(app: &mut CofferApp, ui: &mut egui::Ui) {
     );
 }
 
-fn open_page(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn open_page(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     match app.open_stage {
         OpenStage::SelectContainer => open_container(app, ui),
         OpenStage::SelectKey => open_key(app, ui),
@@ -529,7 +529,7 @@ fn open_page(app: &mut CofferApp, ui: &mut egui::Ui) {
     }
 }
 
-fn open_container(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn open_container(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     page_intro(
         ui,
         "Choose a protected file",
@@ -547,11 +547,11 @@ fn open_container(app: &mut CofferApp, ui: &mut egui::Ui) {
     }
 }
 
-fn open_key(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn open_key(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     page_intro(
         ui,
         "Choose the unlock key",
-        "Coffer will verify that the key and protected file belong together.",
+        "KeyTide will verify that the key and protected file belong together.",
     );
     if let Some(file) = app.encrypted_file.as_ref() {
         widgets::compact_file_row(ui, "Protected file", file, || {});
@@ -578,7 +578,7 @@ fn open_key(app: &mut CofferApp, ui: &mut egui::Ui) {
     }
 }
 
-fn open_review(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn open_review(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     page_intro(
         ui,
         "Review and restore",
@@ -689,8 +689,8 @@ fn inline_notice(ui: &mut egui::Ui, title: &str, body: &str, color: egui::Color3
         });
 }
 
-fn processing(app: &mut CofferApp, ui: &mut egui::Ui, title: &str) {
-    page_intro(ui, title, "Keep Coffer open while this operation finishes.");
+fn processing(app: &mut KeyTideApp, ui: &mut egui::Ui, title: &str) {
+    page_intro(ui, title, "Keep KeyTide open while this operation finishes.");
     egui::Frame::new()
         .fill(theme::surface())
         .stroke(egui::Stroke::new(1.0_f32, theme::border()))
@@ -705,7 +705,7 @@ fn processing(app: &mut CofferApp, ui: &mut egui::Ui, title: &str) {
             );
             ui.add_space(16.0);
             ui.label(
-                egui::RichText::new("Coffer is working locally. Keep the application open.")
+                egui::RichText::new("KeyTide is working locally. Keep the application open.")
                     .color(theme::text_secondary()),
             );
             ui.add_space(16.0);
@@ -715,7 +715,7 @@ fn processing(app: &mut CofferApp, ui: &mut egui::Ui, title: &str) {
         });
 }
 
-fn protect_complete(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn protect_complete(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     page_intro(
         ui,
         "Protection complete",
@@ -730,11 +730,11 @@ fn protect_complete(app: &mut CofferApp, ui: &mut egui::Ui) {
     );
 }
 
-fn open_complete(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn open_complete(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     page_intro(
         ui,
         "Restoration complete",
-        "The file was authenticated completely before Coffer restored it.",
+        "The file was authenticated completely before KeyTide restored it.",
     );
     result_paths(app, ui, app.decryption_output.clone(), None, false);
     if app.offer_text_preview && app.decrypted_text.is_some() {
@@ -746,7 +746,7 @@ fn open_complete(app: &mut CofferApp, ui: &mut egui::Ui) {
 }
 
 fn result_paths(
-    app: &mut CofferApp,
+    app: &mut KeyTideApp,
     ui: &mut egui::Ui,
     output: Option<std::path::PathBuf>,
     key: Option<std::path::PathBuf>,
@@ -832,7 +832,7 @@ fn static_page(ui: &mut egui::Ui, title: &str, body: fn(&mut egui::Ui)) {
 fn security_content(ui: &mut egui::Ui) {
     ui.set_max_width(820.0);
     ui.label(
-        egui::RichText::new("What Coffer protects")
+        egui::RichText::new("What KeyTide protects")
             .size(20.0)
             .strong()
             .color(theme::text_primary()),
@@ -840,7 +840,7 @@ fn security_content(ui: &mut egui::Ui) {
     ui.add_space(12.0);
     ui.label(
         egui::RichText::new(
-            "Coffer is designed to encrypt file contents and filename metadata locally. The separate key is required to restore the original.",
+            "KeyTide is designed to encrypt file contents and filename metadata locally. The separate key is required to restore the original.",
         )
         .color(theme::text_secondary()),
     );
@@ -863,13 +863,13 @@ fn security_content(ui: &mut egui::Ui) {
     security_group(
         ui,
         "Limits",
-        "Coffer cannot protect plaintext from malware already controlling your user session.",
+        "KeyTide cannot protect plaintext from malware already controlling your user session.",
     );
     ui.add_space(26.0);
     inline_notice(
         ui,
         "No recovery backdoor",
-        "A lost key cannot be recreated by Coffer.",
+        "A lost key cannot be recreated by KeyTide.",
         theme::warning(),
     );
     ui.add_space(16.0);
@@ -894,7 +894,7 @@ fn security_group(ui: &mut egui::Ui, title: &str, body: &str) {
     ui.add_space(14.0);
 }
 
-fn settings_page(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn settings_page(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     egui::ScrollArea::vertical()
         .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysHidden)
         .show(ui, |ui| {
@@ -914,7 +914,7 @@ fn settings_page(app: &mut CofferApp, ui: &mut egui::Ui) {
             );
             ui.add_space(8.0);
             ui.label(
-                egui::RichText::new("Control how Coffer handles files and local history.")
+                egui::RichText::new("Control how KeyTide handles files and local history.")
                     .size(16.0)
                     .color(theme::text_secondary()),
             );
@@ -945,7 +945,7 @@ fn settings_page(app: &mut CofferApp, ui: &mut egui::Ui) {
             ui.separator();
             ui.add_space(18.0);
             ui.label(
-                egui::RichText::new("About Coffer")
+                egui::RichText::new("About KeyTide")
                     .size(18.0)
                     .strong()
                     .color(theme::text_primary()),
@@ -963,7 +963,7 @@ fn settings_page(app: &mut CofferApp, ui: &mut egui::Ui) {
         });
 }
 
-fn settings_controls(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn settings_controls(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     egui::Frame::new()
         .fill(theme::surface())
         .stroke(egui::Stroke::new(1.0_f32, theme::border()))
@@ -999,12 +999,12 @@ fn settings_controls(app: &mut CofferApp, ui: &mut egui::Ui) {
             setting_info_row(
                 ui,
                 "Existing files are protected",
-                "Coffer stops instead of replacing an existing container, key, or restored file.",
+                "KeyTide stops instead of replacing an existing container, key, or restored file.",
             );
             setting_info_row(
                 ui,
                 "No location history",
-                "Recently used folders are not persisted after Coffer closes.",
+                "Recently used folders are not persisted after KeyTide closes.",
             );
         });
 }
@@ -1134,7 +1134,7 @@ fn settings_toggle(ui: &mut egui::Ui, on: bool) -> egui::Response {
     response.on_hover_text(if on { "Turn off" } else { "Turn on" })
 }
 
-fn action_bar(app: &mut CofferApp, ui: &mut egui::Ui) {
+fn action_bar(app: &mut KeyTideApp, ui: &mut egui::Ui) {
     ui.horizontal(|ui| {
         let notice_color = match app.notice.kind {
             NoticeKind::Info => theme::text_secondary(),

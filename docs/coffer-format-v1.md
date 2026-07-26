@@ -1,6 +1,6 @@
-# Coffer container and key format v1
+# KeyTide container and key format v1
 
-Status: stable as of Coffer 1.0.0. The production core, filesystem operations, and UI integration follow this format. The deterministic compatibility fixture is enforced by the automated test suite. Version 1 compatibility is frozen; incompatible changes require a new format version.
+Status: stable as of KeyTide 1.0.0. The production core, filesystem operations, and UI integration follow this format. The deterministic compatibility fixture is enforced by the automated test suite. Version 1 compatibility is frozen; incompatible changes require a new format version.
 
 All integers are unsigned and stored in big-endian byte order. Parsers must reject truncated input, inconsistent lengths, unsupported versions, and unsupported algorithms.
 
@@ -13,7 +13,7 @@ All integers are unsigned and stored in big-endian byte order. Parsers must reje
 - Never write plaintext until authentication succeeds.
 - Introduce new behavior through a new format version instead of speculative v1 flags.
 
-The separate key file must be stored and transmitted separately from the `.coffer` container. Coffer has no recovery key or backdoor.
+The separate key file must be stored and transmitted separately from the `.coffer` container. KeyTide has no recovery key or backdoor.
 
 ## `.coffer` container
 
@@ -45,7 +45,7 @@ The payload below is serialized first and then encrypted as one authenticated un
 
 The original filename and exact size are therefore not readable without the correct key. No creation timestamp, generic metadata, key fingerprint, or optional flags are stored in v1.
 
-On restore, the filename remains untrusted even though it was authenticated. Coffer must reject `.` and `..`, NUL, directory components, and platform path separators, then write only inside the destination selected by the user. Existing files must not be overwritten silently.
+On restore, the filename remains untrusted even though it was authenticated. KeyTide must reject `.` and `..`, NUL, directory components, and platform path separators, then write only inside the destination selected by the user. Existing files must not be overwritten silently.
 
 Authentication failures use one public error regardless of whether the likely cause is a wrong key, modified prefix, modified ciphertext, or corruption.
 
@@ -61,7 +61,7 @@ Authentication failures use one public error regardless of whether the likely ca
 
 The `.cofferkey` extension identifies the file in desktop interfaces; the extension is not a security boundary. The encoded key file is exactly 44 bytes. Other lengths, magic values, versions, algorithms, or nonzero reserved bytes are invalid. Writers request owner-only permissions on Unix-like systems (`0600`) and never replace an existing key file.
 
-The key format marker identifies a valid Coffer key; it does not reveal which container it opens. AES-GCM authentication determines whether the selected key matches.
+The key format marker identifies a valid KeyTide key; it does not reveal which container it opens. AES-GCM authentication determines whether the selected key matches.
 
 ## Parser requirements
 

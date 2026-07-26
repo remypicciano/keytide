@@ -8,7 +8,7 @@ Security fixes currently target the latest `1.x` release and the default branch.
 
 Do not open a public issue for a suspected vulnerability. Use GitHub's private vulnerability reporting page:
 
-<https://github.com/remypicciano/coffer/security/advisories/new>
+<https://github.com/remypicciano/keytide/security/advisories/new>
 
 Include the affected commit or version, operating system and architecture, a minimal reproduction using synthetic data, expected and observed behavior, and your assessment of impact. Do not send real `.cofferkey` files, passphrases, carrier files, confidential plaintext, or private containers.
 
@@ -18,7 +18,7 @@ The repository also runs weekly and pull-request scans for committed secrets, Ru
 
 ## Security boundary
 
-Coffer protects file contents and authenticated filename metadata while the container and its matching key remain separated. It does not protect secrets from malware or an administrator already controlling the user session, a compromised build or operating system, screen capture, active process-memory inspection, or disclosure of both the container and matching key.
+KeyTide protects file contents and authenticated filename metadata while the container and its matching key remain separated. It does not protect secrets from malware or an administrator already controlling the user session, a compromised build or operating system, screen capture, active process-memory inspection, or disclosure of both the container and matching key.
 
 No project representative will ask for an unlock key, passphrase, carrier file, or confidential plaintext as part of support or vulnerability triage.
 

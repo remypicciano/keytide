@@ -11,7 +11,7 @@ Status: released in v1.0.0
 - Finalize native file selection, destination review, progress, cancellation, and completion states.
 - Run protection and restoration on background workers connected to the verified v1 core.
 
-## Milestone 2: Coffer format v1
+## Milestone 2: KeyTide format v1
 
 Status: released in v1.0.0
 
@@ -24,7 +24,7 @@ Status: released in v1.0.0
 - Add cross-platform known-answer, corruption, truncation, wrong-key, and path-safety tests.
 - Connect the verified implementation to the existing UI only after the core tests pass.
 
-## Milestone 3: Coffer v1 release
+## Milestone 3: KeyTide v1 release
 
 Status: released in v1.0.0
 
@@ -45,7 +45,7 @@ Status: planned follow-up work
 - Keep cancellation responsive throughout large-file operations and distinguish authentication, writing, and final commit stages without implying completion early.
 - Add automated tests proving that progress is monotonic, never exceeds completed work, reaches 100% only after the output is committed, and resets correctly after cancellation or failure.
 
-## Milestone 4: Coffer format v2 advanced privacy
+## Milestone 4: KeyTide format v2 advanced privacy
 
 Status: format and threat-model draft complete; independent review and implementation required
 
@@ -55,7 +55,7 @@ The normative design work is tracked in [coffer-format-v2.md](coffer-format-v2.m
 
 ### Key carrier mode
 
-Key carrier mode allows an unchanged ordinary file, such as a private photograph, to replace the visible `.cofferkey` file. The carrier contains no appended or embedded Coffer payload.
+Key carrier mode allows an unchanged ordinary file, such as a private photograph, to replace the visible `.cofferkey` file. The carrier contains no appended or embedded KeyTide payload.
 
 - Generate a random 256-bit data-encryption key for every protected file.
 - Encrypt file content with AES-256-GCM using the random data key.

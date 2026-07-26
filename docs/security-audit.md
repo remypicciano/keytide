@@ -15,7 +15,7 @@ Two `quick-xml` advisories are temporarily accepted in `.cargo/audit.toml`:
 - `RUSTSEC-2026-0194`
 - `RUSTSEC-2026-0195`
 
-The affected `quick-xml` release is a build dependency of `wayland-scanner`, reached through the Linux windowing and clipboard stack. It parses protocol XML bundled by the Wayland crates during compilation. Coffer does not expose this parser to selected files, filenames, containers, keys, metadata, network responses, or other runtime input.
+The affected `quick-xml` release is a build dependency of `wayland-scanner`, reached through the Linux windowing and clipboard stack. It parses protocol XML bundled by the Wayland crates during compilation. KeyTide does not expose this parser to selected files, filenames, containers, keys, metadata, network responses, or other runtime input.
 
 The upstream `wayland-scanner` release currently constrains `quick-xml` to the affected `0.39` line, so Cargo cannot select the fixed `0.41` release. The exceptions must be removed as soon as the windowing dependency accepts the fixed parser. A dependency update must rerun `cargo audit`, all tests, and strict Clippy.
 
@@ -34,7 +34,7 @@ GitHub secret scanning and push protection are enabled, as are Dependabot vulner
 
 ## Logging boundary
 
-Coffer logs application lifecycle and generic operation state. It records operation names and stable error codes only. It must not log:
+KeyTide logs application lifecycle and generic operation state. It records operation names and stable error codes only. It must not log:
 
 - source, destination, container, or key paths;
 - original or restored filenames;
@@ -43,6 +43,6 @@ Coffer logs application lifecycle and generic operation state. It records operat
 
 ## External review
 
-Passing automated checks is not a substitute for independent cryptographic and parser review. The v1 format and implementation should receive focused review before Coffer is represented as externally audited software.
+Passing automated checks is not a substitute for independent cryptographic and parser review. The v1 format and implementation should receive focused review before KeyTide is represented as externally audited software.
 
 The repository-wide [threat model](threat-model.md) records stable v1 residual risks and the questions that must be resolved before the [v2 draft](coffer-format-v2.md) becomes an implementation target.

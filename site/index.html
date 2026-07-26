@@ -4,29 +4,29 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#131713">
-    <meta name="description" content="Coffer is a local-first desktop application for authenticated file encryption on macOS, Windows, and Linux.">
-    <meta property="og:title" content="Coffer — protect a file, keep the key apart">
+    <meta name="description" content="KeyTide is a local-first desktop application for authenticated file protection on macOS, Windows, and Linux.">
+    <meta property="og:title" content="KeyTide — protect a file, keep the key apart">
     <meta property="og:description" content="Auditable, local-first file protection with a documented open format and no recovery backdoor.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://remypicciano.github.io/coffer/">
-    <title>Coffer — local-first file protection</title>
-    <link rel="canonical" href="https://remypicciano.github.io/coffer/">
+    <meta property="og:url" content="https://remypicciano.github.io/keytide/">
+    <title>KeyTide — local-first file protection</title>
+    <link rel="canonical" href="https://remypicciano.github.io/keytide/">
     <link rel="manifest" href="site.webmanifest">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
-      <a class="wordmark" href="#top" aria-label="Coffer home">
+      <a class="wordmark" href="#top" aria-label="KeyTide home">
         <span class="mark" aria-hidden="true"><span></span></span>
-        <span>Coffer</span>
+        <span>KeyTide</span>
       </a>
       <nav aria-label="Primary navigation">
         <a href="#security">Security</a>
         <a href="#format">Format</a>
         <a href="#roadmap">Roadmap</a>
         <a href="contact.html">Contact</a>
-        <a class="nav-download" href="https://github.com/remypicciano/coffer/releases/latest">Download v1</a>
+        <a class="nav-download" href="https://github.com/remypicciano/keytide/releases/latest">Download v1</a>
       </nav>
     </header>
 
@@ -35,10 +35,10 @@
         <div class="hero-copy">
           <p class="eyebrow">Local-first · open format · no account</p>
           <h1 id="hero-title">Protect the file.<br><em>Keep the key apart.</em></h1>
-          <p class="lede">Coffer turns one local file into an authenticated container and a separate unlock key. Nothing is uploaded. There is no account, cloud service, master key, or recovery backdoor.</p>
+          <p class="lede">KeyTide turns one local file into an authenticated container and a separate unlock key. Nothing is uploaded. There is no account, cloud service, master key, or recovery backdoor.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="https://github.com/remypicciano/coffer/releases/latest">Download Coffer 1.0</a>
-            <a class="button button-secondary" href="https://github.com/remypicciano/coffer">Inspect the source</a>
+            <a class="button button-primary" href="https://github.com/remypicciano/keytide/releases/latest">Download KeyTide 1.0</a>
+            <a class="button button-secondary" href="https://github.com/remypicciano/keytide">Inspect the source</a>
           </div>
           <p class="release-note">Unsigned preview archives for Windows x86_64, Linux x86_64/ARM64, and macOS Intel/Apple Silicon. Verify the included SHA-256 checksum.</p>
         </div>
@@ -83,7 +83,7 @@
         <ol class="steps">
           <li>
             <span class="step-number">01</span>
-            <div><h3>Choose one file</h3><p>Coffer reads the file locally and creates a fresh 256-bit key from the operating system’s secure random source.</p></div>
+            <div><h3>Choose one file</h3><p>KeyTide reads the file locally and creates a fresh 256-bit key from the operating system’s secure random source.</p></div>
           </li>
           <li>
             <span class="step-number">02</span>
@@ -91,7 +91,7 @@
           </li>
           <li>
             <span class="step-number">03</span>
-            <div><h3>Separate the pair</h3><p>Keep the <code>.coffer</code> container and <code>.cofferkey</code> in different places or channels. Both are required to restore.</p></div>
+            <div><h3>Separate the pair</h3><p>Keep the protected container and matching key in different places or channels. Both are required to restore.</p></div>
           </li>
         </ol>
       </section>
@@ -100,8 +100,8 @@
         <div class="security-intro">
           <p class="eyebrow light">Security boundary</p>
           <h2 id="security-title">Clear guarantees.<br>Clear limits.</h2>
-          <p>Coffer authenticates before it writes plaintext, uses strict versioned parsers, and refuses overwrite races. It cannot make a compromised computer trustworthy.</p>
-          <a class="text-link light" href="https://github.com/remypicciano/coffer/blob/main/SECURITY.md">Read the security policy <span aria-hidden="true">→</span></a>
+          <p>KeyTide authenticates before it writes plaintext, uses strict versioned parsers, and refuses overwrite races. It cannot make a compromised computer trustworthy.</p>
+          <a class="text-link light" href="https://github.com/remypicciano/keytide/blob/main/SECURITY.md">Read the security policy <span aria-hidden="true">→</span></a>
         </div>
         <div class="boundary-list">
           <article>
@@ -134,11 +134,11 @@
             <h2 id="format-title">A documented recovery path.</h2>
             <p>The v1 byte layout is frozen and published with a deterministic compatibility vector. A standalone Python recovery utility provides an independent implementation.</p>
             <div class="link-row">
-              <a class="text-link" href="https://github.com/remypicciano/coffer/blob/main/docs/coffer-format-v1.md">Format specification <span aria-hidden="true">→</span></a>
-              <a class="text-link" href="https://github.com/remypicciano/coffer/blob/main/docs/recovery.md">Recovery guide <span aria-hidden="true">→</span></a>
+              <a class="text-link" href="https://github.com/remypicciano/keytide/blob/main/docs/coffer-format-v1.md">Format specification <span aria-hidden="true">→</span></a>
+              <a class="text-link" href="https://github.com/remypicciano/keytide/blob/main/docs/recovery.md">Recovery guide <span aria-hidden="true">→</span></a>
             </div>
           </div>
-          <div class="format-stack" aria-label="Coffer version 1 container layout">
+          <div class="format-stack" aria-label="KeyTide version 1 container layout">
             <div class="byte-row"><span>8 B</span><strong>Magic</strong><code>COFFER\0\x01</code></div>
             <div class="byte-row"><span>2 B</span><strong>Version + algorithm</strong><code>01 · 01</code></div>
             <div class="byte-row"><span>12 B</span><strong>Random nonce</strong><code>authenticated</code></div>
@@ -165,10 +165,10 @@
         <div class="roadmap-lead">
           <p class="eyebrow">What follows v1</p>
           <h2 id="roadmap-title">Version 2 begins with the specification.</h2>
-          <p>Key carriers and metadata sanitization change the security model. They are being designed as an explicit new container version—not slipped into v1 as ambiguous flags.</p>
+          <p>Key carriers and metadata sanitization change the security model. They are being designed as an explicit new container version, not slipped into v1 as ambiguous flags.</p>
           <div class="hero-actions">
-            <a class="button button-secondary" href="https://github.com/remypicciano/coffer/blob/main/docs/coffer-format-v2.md">Read the v2 draft</a>
-            <a class="button button-secondary" href="https://github.com/remypicciano/coffer/blob/main/docs/threat-model.md">Threat model</a>
+            <a class="button button-secondary" href="https://github.com/remypicciano/keytide/blob/main/docs/coffer-format-v2.md">Read the v2 draft</a>
+            <a class="button button-secondary" href="https://github.com/remypicciano/keytide/blob/main/docs/threat-model.md">Threat model</a>
           </div>
         </div>
         <div class="roadmap-items">
@@ -179,24 +179,24 @@
       </section>
 
       <section class="closing" aria-labelledby="closing-title">
-        <p class="eyebrow light">Coffer 1.0</p>
+        <p class="eyebrow light">KeyTide 1.0</p>
         <h2 id="closing-title">Local files deserve<br>a local security boundary.</h2>
         <div class="hero-actions">
-          <a class="button button-paper" href="https://github.com/remypicciano/coffer/releases/latest">Get the release</a>
-          <a class="button button-outline" href="https://github.com/remypicciano/coffer">Review on GitHub</a>
+          <a class="button button-paper" href="https://github.com/remypicciano/keytide/releases/latest">Get the release</a>
+          <a class="button button-outline" href="https://github.com/remypicciano/keytide">Review on GitHub</a>
           <a class="button button-secondary" href="contact.html">Contact Rémy</a>
         </div>
       </section>
     </main>
 
     <footer>
-      <a class="wordmark" href="#top"><span class="mark" aria-hidden="true"><span></span></span><span>Coffer</span></a>
+      <a class="wordmark" href="#top"><span class="mark" aria-hidden="true"><span></span></span><span>KeyTide</span></a>
       <p>Open source under the MIT License. Built by Rémy Picciano.</p>
       <nav aria-label="Footer navigation">
         <a href="contact.html">Contact</a>
-        <a href="https://github.com/remypicciano/coffer/blob/main/SECURITY.md">Security</a>
-        <a href="https://github.com/remypicciano/coffer/blob/main/SUPPORT.md">Support</a>
-        <a href="https://github.com/remypicciano/coffer/blob/main/LICENSE">License</a>
+        <a href="https://github.com/remypicciano/keytide/blob/main/SECURITY.md">Security</a>
+        <a href="https://github.com/remypicciano/keytide/blob/main/SUPPORT.md">Support</a>
+        <a href="https://github.com/remypicciano/keytide/blob/main/LICENSE">License</a>
       </nav>
     </footer>
   </body>

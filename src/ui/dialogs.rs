@@ -1,13 +1,13 @@
 use eframe::egui;
 
-use crate::app::CofferApp;
+use crate::app::KeyTideApp;
 use crate::ui::theme;
 
-pub fn show(app: &mut CofferApp, ctx: &egui::Context) {
+pub fn show(app: &mut KeyTideApp, ctx: &egui::Context) {
     show_error_dialog(app, ctx);
 }
 
-fn show_error_dialog(app: &mut CofferApp, ctx: &egui::Context) {
+fn show_error_dialog(app: &mut KeyTideApp, ctx: &egui::Context) {
     if !app.show_error {
         return;
     }

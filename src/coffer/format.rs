@@ -4,7 +4,7 @@ use aes_gcm::{
 };
 use zeroize::Zeroizing;
 
-use super::{error::CofferError, key::SecretKey};
+use super::{error::KeyTideError, key::SecretKey};
 
 const CONTAINER_MAGIC: &[u8; 8] = b"COFFER\0\x01";
 const VERSION: u8 = 1;
@@ -22,9 +22,9 @@ pub(super) fn encrypt(
     filename: &str,
     plaintext: &[u8],
     key: &SecretKey,
-) -> Result<Vec<u8>, CofferError> {
+) -> Result<Vec<u8>, KeyTideError> {
     let mut nonce = [0_u8; 12];
-    getrandom::fill(&mut nonce).map_err(|_| CofferError::RandomFailed)?;
+    getrandom::fill(&mut nonce).map_err(|_| KeyTideError::RandomFailed)?;
     encrypt_with_nonce(filename, plaintext, key, nonce)
 }
 
@@ -33,18 +33,18 @@ fn encrypt_with_nonce(
     plaintext: &[u8],
     key: &SecretKey,
     nonce: [u8; 12],
-) -> Result<Vec<u8>, CofferError> {
+) -> Result<Vec<u8>, KeyTideError> {
     validate_filename(filename)?;
     let filename_bytes = filename.as_bytes();
     let filename_len =
-        u16::try_from(filename_bytes.len()).map_err(|_| CofferError::InvalidFilename)?;
-    let plaintext_len = u64::try_from(plaintext.len()).map_err(|_| CofferError::FileTooLarge)?;
+        u16::try_from(filename_bytes.len()).map_err(|_| KeyTideError::InvalidFilename)?;
+    let plaintext_len = u64::try_from(plaintext.len()).map_err(|_| KeyTideError::FileTooLarge)?;
 
     let payload_capacity = 2_usize
         .checked_add(filename_bytes.len())
         .and_then(|value| value.checked_add(8))
         .and_then(|value| value.checked_add(plaintext.len()))
-        .ok_or(CofferError::FileTooLarge)?;
+        .ok_or(KeyTideError::FileTooLarge)?;
     let mut encoded_payload = Zeroizing::new(Vec::with_capacity(payload_capacity));
     encoded_payload.extend_from_slice(&filename_len.to_be_bytes());
     encoded_payload.extend_from_slice(filename_bytes);
@@ -54,11 +54,11 @@ fn encrypt_with_nonce(
     let ciphertext_len = encoded_payload
         .len()
         .checked_add(TAG_LEN)
-        .ok_or(CofferError::FileTooLarge)?;
+        .ok_or(KeyTideError::FileTooLarge)?;
     let ciphertext_len_u64 =
-        u64::try_from(ciphertext_len).map_err(|_| CofferError::FileTooLarge)?;
+        u64::try_from(ciphertext_len).map_err(|_| KeyTideError::FileTooLarge)?;
     let prefix = encode_prefix(nonce, ciphertext_len_u64);
-    let cipher = Aes256Gcm::new_from_slice(key.as_bytes()).map_err(|_| CofferError::InvalidKey)?;
+    let cipher = Aes256Gcm::new_from_slice(key.as_bytes()).map_err(|_| KeyTideError::InvalidKey)?;
     let ciphertext = cipher
         .encrypt(
             Nonce::from_slice(&nonce),
@@ -67,7 +67,7 @@ fn encrypt_with_nonce(
                 aad: &prefix,
             },
         )
-        .map_err(|_| CofferError::AuthenticationFailed)?;
+        .map_err(|_| KeyTideError::AuthenticationFailed)?;
 
     let mut container = Vec::with_capacity(PREFIX_LEN + ciphertext.len());
     container.extend_from_slice(&prefix);
@@ -75,12 +75,12 @@ fn encrypt_with_nonce(
     Ok(container)
 }
 
-pub(super) fn decrypt(container: &[u8], key: &SecretKey) -> Result<DecryptedPayload, CofferError> {
+pub(super) fn decrypt(container: &[u8], key: &SecretKey) -> Result<DecryptedPayload, KeyTideError> {
     let (prefix, ciphertext) = parse_container(container)?;
     let nonce: &[u8; 12] = prefix[10..22]
         .try_into()
-        .map_err(|_| CofferError::InvalidContainer)?;
-    let cipher = Aes256Gcm::new_from_slice(key.as_bytes()).map_err(|_| CofferError::InvalidKey)?;
+        .map_err(|_| KeyTideError::InvalidContainer)?;
+    let cipher = Aes256Gcm::new_from_slice(key.as_bytes()).map_err(|_| KeyTideError::InvalidKey)?;
     let plaintext = cipher
         .decrypt(
             Nonce::from_slice(nonce),
@@ -89,7 +89,7 @@ pub(super) fn decrypt(container: &[u8], key: &SecretKey) -> Result<DecryptedPayl
                 aad: prefix,
             },
         )
-        .map_err(|_| CofferError::AuthenticationFailed)?;
+        .map_err(|_| KeyTideError::AuthenticationFailed)?;
     parse_payload(Zeroizing::new(plaintext))
 }
 
@@ -103,63 +103,63 @@ fn encode_prefix(nonce: [u8; 12], ciphertext_len: u64) -> [u8; PREFIX_LEN] {
     prefix
 }
 
-fn parse_container(container: &[u8]) -> Result<(&[u8], &[u8]), CofferError> {
+fn parse_container(container: &[u8]) -> Result<(&[u8], &[u8]), KeyTideError> {
     if container.len() < PREFIX_LEN || container.get(..8) != Some(CONTAINER_MAGIC) {
-        return Err(CofferError::InvalidContainer);
+        return Err(KeyTideError::InvalidContainer);
     }
     if container[8] != VERSION {
-        return Err(CofferError::UnsupportedVersion(container[8]));
+        return Err(KeyTideError::UnsupportedVersion(container[8]));
     }
     if container[9] != ALGORITHM_AES_256_GCM {
-        return Err(CofferError::UnsupportedAlgorithm(container[9]));
+        return Err(KeyTideError::UnsupportedAlgorithm(container[9]));
     }
     let declared = u64::from_be_bytes(
         container[22..30]
             .try_into()
-            .map_err(|_| CofferError::InvalidContainer)?,
+            .map_err(|_| KeyTideError::InvalidContainer)?,
     );
-    let declared = usize::try_from(declared).map_err(|_| CofferError::FileTooLarge)?;
+    let declared = usize::try_from(declared).map_err(|_| KeyTideError::FileTooLarge)?;
     if declared < TAG_LEN || container.len().checked_sub(PREFIX_LEN) != Some(declared) {
-        return Err(CofferError::InvalidContainer);
+        return Err(KeyTideError::InvalidContainer);
     }
     Ok(container.split_at(PREFIX_LEN))
 }
 
-fn parse_payload(payload: Zeroizing<Vec<u8>>) -> Result<DecryptedPayload, CofferError> {
-    let filename_len_bytes = payload.get(..2).ok_or(CofferError::InvalidContainer)?;
+fn parse_payload(payload: Zeroizing<Vec<u8>>) -> Result<DecryptedPayload, KeyTideError> {
+    let filename_len_bytes = payload.get(..2).ok_or(KeyTideError::InvalidContainer)?;
     let filename_len = usize::from(u16::from_be_bytes(
         filename_len_bytes
             .try_into()
-            .map_err(|_| CofferError::InvalidContainer)?,
+            .map_err(|_| KeyTideError::InvalidContainer)?,
     ));
     if filename_len == 0 || filename_len > MAX_FILENAME_LEN {
-        return Err(CofferError::InvalidFilename);
+        return Err(KeyTideError::InvalidFilename);
     }
     let name_end = 2_usize
         .checked_add(filename_len)
-        .ok_or(CofferError::InvalidContainer)?;
+        .ok_or(KeyTideError::InvalidContainer)?;
     let size_end = name_end
         .checked_add(8)
-        .ok_or(CofferError::InvalidContainer)?;
+        .ok_or(KeyTideError::InvalidContainer)?;
     let filename_bytes = payload
         .get(2..name_end)
-        .ok_or(CofferError::InvalidContainer)?;
+        .ok_or(KeyTideError::InvalidContainer)?;
     let filename = std::str::from_utf8(filename_bytes)
-        .map_err(|_| CofferError::InvalidFilename)?
+        .map_err(|_| KeyTideError::InvalidFilename)?
         .to_owned();
     validate_filename(&filename)?;
     let declared_size = u64::from_be_bytes(
         payload
             .get(name_end..size_end)
-            .ok_or(CofferError::InvalidContainer)?
+            .ok_or(KeyTideError::InvalidContainer)?
             .try_into()
-            .map_err(|_| CofferError::InvalidContainer)?,
+            .map_err(|_| KeyTideError::InvalidContainer)?,
     );
     let bytes = payload
         .get(size_end..)
-        .ok_or(CofferError::InvalidContainer)?;
-    if u64::try_from(bytes.len()).map_err(|_| CofferError::FileTooLarge)? != declared_size {
-        return Err(CofferError::InvalidContainer);
+        .ok_or(KeyTideError::InvalidContainer)?;
+    if u64::try_from(bytes.len()).map_err(|_| KeyTideError::FileTooLarge)? != declared_size {
+        return Err(KeyTideError::InvalidContainer);
     }
     Ok(DecryptedPayload {
         filename,
@@ -167,7 +167,7 @@ fn parse_payload(payload: Zeroizing<Vec<u8>>) -> Result<DecryptedPayload, Coffer
     })
 }
 
-pub(super) fn validate_filename(filename: &str) -> Result<(), CofferError> {
+pub(super) fn validate_filename(filename: &str) -> Result<(), KeyTideError> {
     let bytes = filename.as_bytes();
     if bytes.is_empty()
         || bytes.len() > MAX_FILENAME_LEN
@@ -176,7 +176,7 @@ pub(super) fn validate_filename(filename: &str) -> Result<(), CofferError> {
         || filename.contains(['\0', '/', '\\'])
         || std::path::Path::new(filename).components().count() != 1
     {
-        return Err(CofferError::InvalidFilename);
+        return Err(KeyTideError::InvalidFilename);
     }
     Ok(())
 }
@@ -218,14 +218,14 @@ mod tests {
         let (key, container) = fixture();
         assert!(matches!(
             decrypt(&container, &SecretKey([0x33; 32])),
-            Err(CofferError::AuthenticationFailed)
+            Err(KeyTideError::AuthenticationFailed)
         ));
         for index in [10, 21, 30, container.len() - 1] {
             let mut changed = container.clone();
             changed[index] ^= 1;
             assert!(matches!(
                 decrypt(&changed, &key),
-                Err(CofferError::AuthenticationFailed)
+                Err(KeyTideError::AuthenticationFailed)
             ));
         }
     }
@@ -240,19 +240,19 @@ mod tests {
         trailing.push(0);
         assert!(matches!(
             decrypt(&trailing, &key),
-            Err(CofferError::InvalidContainer)
+            Err(KeyTideError::InvalidContainer)
         ));
         let mut version = container.clone();
         version[8] = 2;
         assert!(matches!(
             decrypt(&version, &key),
-            Err(CofferError::UnsupportedVersion(2))
+            Err(KeyTideError::UnsupportedVersion(2))
         ));
         let mut algorithm = container;
         algorithm[9] = 2;
         assert!(matches!(
             decrypt(&algorithm, &key),
-            Err(CofferError::UnsupportedAlgorithm(2))
+            Err(KeyTideError::UnsupportedAlgorithm(2))
         ));
     }
 
@@ -261,7 +261,7 @@ mod tests {
         for invalid in ["", ".", "..", "../x", "a/b", "a\\b", "nul\0x"] {
             assert!(matches!(
                 validate_filename(invalid),
-                Err(CofferError::InvalidFilename)
+                Err(KeyTideError::InvalidFilename)
             ));
         }
         assert!(validate_filename("résumé.txt").is_ok());
@@ -277,7 +277,7 @@ mod tests {
         invalid_utf8.extend_from_slice(&0_u64.to_be_bytes());
         assert!(matches!(
             parse_payload(Zeroizing::new(invalid_utf8)),
-            Err(CofferError::InvalidFilename)
+            Err(KeyTideError::InvalidFilename)
         ));
 
         let mut wrong_size = vec![0, 1, b'a'];
@@ -285,7 +285,7 @@ mod tests {
         wrong_size.push(1);
         assert!(matches!(
             parse_payload(Zeroizing::new(wrong_size)),
-            Err(CofferError::InvalidContainer)
+            Err(KeyTideError::InvalidContainer)
         ));
     }
 }

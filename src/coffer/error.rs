@@ -1,14 +1,14 @@
 use std::path::PathBuf;
 
 #[derive(Debug, thiserror::Error)]
-pub enum CofferError {
-    #[error("This file is not a valid Coffer container.")]
+pub enum KeyTideError {
+    #[error("This file is not a valid KeyTide container.")]
     InvalidContainer,
-    #[error("This Coffer file uses an unsupported format version ({0}).")]
+    #[error("This KeyTide file uses an unsupported format version ({0}).")]
     UnsupportedVersion(u8),
-    #[error("This Coffer file uses an unsupported encryption algorithm ({0}).")]
+    #[error("This KeyTide file uses an unsupported encryption algorithm ({0}).")]
     UnsupportedAlgorithm(u8),
-    #[error("The selected key file is not a valid Coffer key.")]
+    #[error("The selected key file is not a valid KeyTide key.")]
     InvalidKey,
     #[error(
         "The file could not be authenticated. The key may not match, or a file may have changed."
@@ -18,19 +18,19 @@ pub enum CofferError {
     InvalidFilename,
     #[error("A file already exists at {0}.")]
     OutputExists(PathBuf),
-    #[error("Coffer cannot process a file this large on this computer.")]
+    #[error("KeyTide cannot process a file this large on this computer.")]
     FileTooLarge,
     #[error("The operating system could not provide secure random data.")]
     RandomFailed,
     #[error("The operation was cancelled. No incomplete output was kept.")]
     Cancelled,
-    #[error("Coffer could not read the selected file.")]
+    #[error("KeyTide could not read the selected file.")]
     ReadFailed(#[source] std::io::Error),
-    #[error("Coffer could not write the selected destination.")]
+    #[error("KeyTide could not write the selected destination.")]
     WriteFailed(#[source] std::io::Error),
 }
 
-impl CofferError {
+impl KeyTideError {
     pub fn user_message(&self) -> String {
         self.to_string()
     }

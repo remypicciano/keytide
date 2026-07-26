@@ -1,11 +1,11 @@
 [package]
-name = "coffer"
+name = "keytide"
 version = "1.0.0"
 edition = "2024"
 license = "MIT"
-repository = "https://github.com/remypicciano/coffer"
+repository = "https://github.com/remypicciano/keytide"
 readme = "README.md"
-description = "Local-first authenticated file encryption for the desktop"
+description = "Local-first authenticated file protection for the desktop"
 
 [dependencies]
 # Feature-unifies with aes-gcm's backend so expanded AES round keys are wiped on drop.

@@ -638,7 +638,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "coffer"
+name = "keytide"
 version = "1.0.0"
 dependencies = [
  "aes",

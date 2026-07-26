@@ -7,7 +7,7 @@ use std::{
 use zeroize::Zeroizing;
 
 use super::{
-    error::CofferError,
+    error::KeyTideError,
     format,
     key::{self, SecretKey},
 };
@@ -36,7 +36,7 @@ pub struct RestoreResult {
     pub original_filename: String,
 }
 
-pub fn protect_file(request: ProtectRequest<'_>) -> Result<ProtectResult, CofferError> {
+pub fn protect_file(request: ProtectRequest<'_>) -> Result<ProtectResult, KeyTideError> {
     tracing::info!(operation = "protect", "operation started");
     let result = protect_file_inner(request);
     match &result {
@@ -50,9 +50,9 @@ pub fn protect_file(request: ProtectRequest<'_>) -> Result<ProtectResult, Coffer
     result
 }
 
-fn protect_file_inner(request: ProtectRequest<'_>) -> Result<ProtectResult, CofferError> {
+fn protect_file_inner(request: ProtectRequest<'_>) -> Result<ProtectResult, KeyTideError> {
     if request.key_output == request.container_output {
-        return Err(CofferError::OutputExists(
+        return Err(KeyTideError::OutputExists(
             request.container_output.to_path_buf(),
         ));
     }
@@ -62,9 +62,9 @@ fn protect_file_inner(request: ProtectRequest<'_>) -> Result<ProtectResult, Coff
         .source
         .file_name()
         .and_then(|value| value.to_str())
-        .ok_or(CofferError::InvalidFilename)?;
+        .ok_or(KeyTideError::InvalidFilename)?;
     format::validate_filename(source_name)?;
-    let plaintext = Zeroizing::new(fs::read(request.source).map_err(CofferError::ReadFailed)?);
+    let plaintext = Zeroizing::new(fs::read(request.source).map_err(KeyTideError::ReadFailed)?);
     check_cancelled(request.cancelled)?;
 
     let key = SecretKey::generate()?;
@@ -97,7 +97,7 @@ fn protect_file_inner(request: ProtectRequest<'_>) -> Result<ProtectResult, Coff
     })
 }
 
-pub fn restore_file(request: RestoreRequest<'_>) -> Result<RestoreResult, CofferError> {
+pub fn restore_file(request: RestoreRequest<'_>) -> Result<RestoreResult, KeyTideError> {
     tracing::info!(operation = "restore", "operation started");
     let result = restore_file_inner(request);
     match &result {
@@ -111,10 +111,10 @@ pub fn restore_file(request: RestoreRequest<'_>) -> Result<RestoreResult, Coffer
     result
 }
 
-fn restore_file_inner(request: RestoreRequest<'_>) -> Result<RestoreResult, CofferError> {
+fn restore_file_inner(request: RestoreRequest<'_>) -> Result<RestoreResult, KeyTideError> {
     ensure_absent(request.output)?;
-    let container = fs::read(request.container).map_err(CofferError::ReadFailed)?;
-    let key_bytes = Zeroizing::new(fs::read(request.key).map_err(CofferError::ReadFailed)?);
+    let container = fs::read(request.container).map_err(KeyTideError::ReadFailed)?;
+    let key_bytes = Zeroizing::new(fs::read(request.key).map_err(KeyTideError::ReadFailed)?);
     let key = key::parse(&key_bytes)?;
     let payload = format::decrypt(&container, &key)?;
     check_cancelled(request.cancelled)?;
@@ -130,17 +130,17 @@ fn restore_file_inner(request: RestoreRequest<'_>) -> Result<RestoreResult, Coff
     })
 }
 
-fn check_cancelled(cancelled: Option<&AtomicBool>) -> Result<(), CofferError> {
+fn check_cancelled(cancelled: Option<&AtomicBool>) -> Result<(), KeyTideError> {
     if cancelled.is_some_and(|value| value.load(Ordering::Relaxed)) {
-        Err(CofferError::Cancelled)
+        Err(KeyTideError::Cancelled)
     } else {
         Ok(())
     }
 }
 
-fn ensure_absent(path: &Path) -> Result<(), CofferError> {
+fn ensure_absent(path: &Path) -> Result<(), KeyTideError> {
     if path.exists() {
-        Err(CofferError::OutputExists(path.to_path_buf()))
+        Err(KeyTideError::OutputExists(path.to_path_buf()))
     } else {
         Ok(())
     }
@@ -153,20 +153,20 @@ struct TemporaryOutput {
 }
 
 impl TemporaryOutput {
-    fn create(final_path: &Path, owner_only: bool) -> Result<Self, CofferError> {
+    fn create(final_path: &Path, owner_only: bool) -> Result<Self, KeyTideError> {
         #[cfg(not(unix))]
         let _ = owner_only;
 
         ensure_absent(final_path)?;
         let parent = final_path.parent().ok_or_else(|| {
-            CofferError::WriteFailed(io::Error::new(
+            KeyTideError::WriteFailed(io::Error::new(
                 io::ErrorKind::InvalidInput,
                 "missing parent",
             ))
         })?;
         for _ in 0..16 {
             let mut random = [0_u8; 8];
-            getrandom::fill(&mut random).map_err(|_| CofferError::RandomFailed)?;
+            getrandom::fill(&mut random).map_err(|_| KeyTideError::RandomFailed)?;
             let suffix = u64::from_ne_bytes(random);
             let temporary_path = parent.join(format!(".coffer-{suffix:016x}.tmp"));
             let mut options = OpenOptions::new();
@@ -185,35 +185,35 @@ impl TemporaryOutput {
                     });
                 }
                 Err(error) if error.kind() == io::ErrorKind::AlreadyExists => continue,
-                Err(error) => return Err(CofferError::WriteFailed(error)),
+                Err(error) => return Err(KeyTideError::WriteFailed(error)),
             }
         }
-        Err(CofferError::WriteFailed(io::Error::new(
+        Err(KeyTideError::WriteFailed(io::Error::new(
             io::ErrorKind::AlreadyExists,
             "could not reserve temporary output",
         )))
     }
 
-    fn write_all(&mut self, bytes: &[u8]) -> Result<(), CofferError> {
+    fn write_all(&mut self, bytes: &[u8]) -> Result<(), KeyTideError> {
         let file = self.file.as_mut().ok_or_else(|| {
-            CofferError::WriteFailed(io::Error::other("temporary output is closed"))
+            KeyTideError::WriteFailed(io::Error::other("temporary output is closed"))
         })?;
-        file.write_all(bytes).map_err(CofferError::WriteFailed)?;
-        file.sync_all().map_err(CofferError::WriteFailed)
+        file.write_all(bytes).map_err(KeyTideError::WriteFailed)?;
+        file.sync_all().map_err(KeyTideError::WriteFailed)
     }
 
-    fn commit(mut self) -> Result<PathBuf, CofferError> {
+    fn commit(mut self) -> Result<PathBuf, KeyTideError> {
         self.file.take();
         match fs::hard_link(&self.temporary_path, &self.final_path) {
             Ok(()) => {}
             Err(error) if error.kind() == io::ErrorKind::AlreadyExists => {
-                return Err(CofferError::OutputExists(self.final_path.clone()));
+                return Err(KeyTideError::OutputExists(self.final_path.clone()));
             }
-            Err(error) => return Err(CofferError::WriteFailed(error)),
+            Err(error) => return Err(KeyTideError::WriteFailed(error)),
         }
         if let Err(error) = fs::remove_file(&self.temporary_path) {
             let _ = fs::remove_file(&self.final_path);
-            return Err(CofferError::WriteFailed(error));
+            return Err(KeyTideError::WriteFailed(error));
         }
         Ok(self.final_path.clone())
     }
@@ -265,7 +265,7 @@ mod tests {
                 output: &restored,
                 cancelled: None,
             }),
-            Err(CofferError::OutputExists(_))
+            Err(KeyTideError::OutputExists(_))
         ));
     }
 
@@ -322,7 +322,7 @@ mod tests {
                 output: &output,
                 cancelled: None,
             }),
-            Err(CofferError::AuthenticationFailed)
+            Err(KeyTideError::AuthenticationFailed)
         ));
         assert!(!output.exists());
         assert_eq!(
@@ -350,7 +350,7 @@ mod tests {
                 key_output: &key,
                 cancelled: Some(&cancelled),
             }),
-            Err(CofferError::Cancelled)
+            Err(KeyTideError::Cancelled)
         ));
         assert!(!container.exists());
         assert!(!key.exists());
@@ -374,7 +374,7 @@ mod tests {
         fs::write(&output, b"existing data").unwrap();
         assert!(matches!(
             temporary.commit(),
-            Err(CofferError::OutputExists(_))
+            Err(KeyTideError::OutputExists(_))
         ));
         assert_eq!(fs::read(&output).unwrap(), b"existing data");
         assert!(!reserved_temp.exists());
@@ -415,7 +415,7 @@ mod tests {
                 output: &invalid_output,
                 cancelled: None,
             }),
-            Err(CofferError::AuthenticationFailed)
+            Err(KeyTideError::AuthenticationFailed)
         ));
         assert!(!invalid_output.exists());
     }

@@ -1,14 +1,14 @@
 # Cross-platform recovery and decryption
 
-This document is the long-term recovery path for Coffer v1 data if the desktop application is unavailable or discontinued. Keep the `.coffer` container and its matching `.cofferkey` file separate, and retain a copy of this repository or the published format specification.
+This document is the long-term recovery path for KeyTide v1 data if the desktop application is unavailable or discontinued. Keep the `.coffer` container and its matching `.cofferkey` file separate, and retain a copy of this repository or the published format specification.
 
-For ordinary use, prefer the native archives attached to the [v1.0.0 release](https://github.com/remypicciano/coffer/releases/tag/v1.0.0). Verify the accompanying SHA-256 checksum. The initial archives are not platform-code-signed.
+For ordinary use, prefer the native archives attached to the [v1.0.0 release](https://github.com/remypicciano/keytide/releases/tag/v1.0.0). Verify the accompanying SHA-256 checksum. The initial archives are not platform-code-signed.
 
-The v1 format is platform-independent. A container created on macOS can be decrypted on Windows or Linux, and the reverse is also true. Coffer uses standard AES-256-GCM; no device identifier, operating-system credential, online account, server, or Coffer-controlled service is required.
+The v1 format is platform-independent. A container created on macOS can be decrypted on Windows or Linux, and the reverse is also true. KeyTide uses standard AES-256-GCM; no device identifier, operating-system credential, online account, server, or KeyTide-controlled service is required.
 
 The v2 carrier design remains a review draft and is not covered by this recovery utility. Keep v1 recovery materials and binaries available even while v2 is being developed.
 
-## Preferred recovery: build Coffer from source
+## Preferred recovery: build KeyTide from source
 
 Install the stable Rust toolchain from <https://rustup.rs/>, obtain this repository, and run:
 
@@ -21,8 +21,8 @@ Select **Restore**, choose the `.coffer` container and matching `.cofferkey`, ch
 
 Native executable locations after building:
 
-- macOS and Linux: `target/release/coffer`
-- Windows: `target\release\coffer.exe`
+- macOS and Linux: `target/release/keytide`
+- Windows: `target\release\keytide.exe`
 
 Linux may require distribution packages for X11 development. On Debian, Ubuntu, or Kali:
 
@@ -30,7 +30,7 @@ Linux may require distribution packages for X11 development. On Debian, Ubuntu, 
 sudo apt update
 sudo apt install -y build-essential pkg-config libx11-dev libxkbcommon-dev
 cargo build --locked --release
-./target/release/coffer
+./target/release/keytide
 ```
 
 ## Emergency recovery without the GUI

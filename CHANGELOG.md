@@ -1,12 +1,12 @@
 # Changelog
 
-All notable changes to Coffer are recorded here. The project follows semantic versioning once tagged releases begin.
+All notable changes to KeyTide are recorded here. The project follows semantic versioning once tagged releases begin.
 
 ## Unreleased
 
 ### Added
 
-- Review draft of the Coffer v2 carrier-only container, authenticated sanitization records, parser limits, and release gate.
+- Review draft of the KeyTide v2 carrier-only container, authenticated sanitization records, parser limits, and release gate.
 - Repository threat model covering v1 guarantees, residual risks, v2 review questions, and the verification program.
 - Public GitHub Pages site for the security boundary, format, downloads, and roadmap.
 
@@ -41,4 +41,4 @@ All notable changes to Coffer are recorded here. The project follows semantic ve
 - Simulated timer-based protection and restoration results.
 - Prototype messages claiming that no files were read or written.
 
-[1.0.0]: https://github.com/remypicciano/coffer/releases/tag/v1.0.0
+[1.0.0]: https://github.com/remypicciano/keytide/releases/tag/v1.0.0

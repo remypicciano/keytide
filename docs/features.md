@@ -1,8 +1,8 @@
-# Coffer feature catalog
+# KeyTide feature catalog
 
 Last updated: July 13, 2026
 
-Coffer is a local-first desktop application for protecting individual files with authenticated encryption and a separate unlock key. Version 1 is intentionally small and auditable. Advanced carrier files, passphrases, sanitization, and cloud-related concepts are reserved for a future version of the container format.
+KeyTide is a local-first desktop application for protecting individual files with authenticated encryption and a separate unlock key. Version 1 is intentionally small and auditable. Advanced carrier files, passphrases, sanitization, and cloud-related concepts are reserved for a future version of the container format.
 
 ## Version 1: implemented features
 
@@ -141,7 +141,7 @@ These features are now defined in the [v2 format review draft](coffer-format-v2.
 ### Ordinary-file key carriers
 
 - Use an unchanged ordinary image, document, or other file as a key carrier.
-- Keep the carrier valid in its normal application without embedding or appending a Coffer payload.
+- Keep the carrier valid in its normal application without embedding or appending a KeyTide payload.
 - Derive wrapping material from the carrier's exact bytes using a standardized, domain-separated KDF.
 - Generate a random AES data-encryption key and store only its authenticated wrapped form in the v2 container.
 - Offer a convenient carrier-only profile where possession of the exact carrier is equivalent to possession of the key.
@@ -185,7 +185,7 @@ Those actions may rewrite the file even when it looks identical. A rewritten cop
 ## Safety summary
 
 - Keep each `.cofferkey` separate from its matching `.coffer` file.
-- Back up keys carefully; Coffer cannot recreate a lost key.
+- Back up keys carefully; KeyTide cannot recreate a lost key.
 - Do not treat a renamed key as cryptographically hidden.
 - For future carriers, send exact files as attachments, never inline.
 - Use carrier-plus-passphrase mode when an openly shared carrier must not be sufficient by itself.

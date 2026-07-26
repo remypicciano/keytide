@@ -1,4 +1,4 @@
-# Coffer container format v2 — review draft
+# KeyTide container format v2 — review draft
 
 Status: **cryptographic design draft; not implemented or production-ready**. This document freezes no compatibility promise yet. The version byte, algorithm-suite identifiers, KDF parameters, and test vectors must remain experimental until an independent review resolves every item in the release gate.
 
@@ -20,7 +20,7 @@ Version 2 adds ordinary-file key carriers and an authenticated place to record o
 - Making a public or easily obtained carrier secret in carrier-only mode.
 - Recovering a lost carrier or passphrase.
 - Surviving malware that controls the active user session.
-- Modifying a carrier to hide, append, or embed Coffer data.
+- Modifying a carrier to hide, append, or embed KeyTide data.
 - Claiming that arbitrary document formats can be sanitized reliably.
 
 ## Terminology
