@@ -1,5 +1,7 @@
 # KeyTide support
 
+KeyTide is a small tool with a small support surface — that's by design. When something's confusing or broken, start with the docs. When you need a human, here's how to reach one safely.
+
 Use the documentation and issue templates for non-sensitive questions and reproducible bugs. Never post or send a `.cofferkey`, passphrase, carrier file, confidential plaintext, or private container for support.
 
 - Read the [feature catalog](docs/features.md) and [recovery guide](docs/recovery.md).
@@ -8,4 +10,4 @@ Use the documentation and issue templates for non-sensitive questions and reprod
 - Use GitHub private vulnerability reporting for security issues.
 - Download supported binaries only from this repository's GitHub Releases page and verify the published SHA-256 checksum.
 
-KeyTide has no recovery backdoor. Lost key material cannot be recreated by the developer.
+One thing worth repeating loudly: KeyTide has **no recovery backdoor**. Lost key material cannot be recreated by the developer — or by anyone. Back your keys up the way you'd back up a house key: deliberately, and somewhere separate.

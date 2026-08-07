@@ -1,10 +1,14 @@
 # KeyTide feature catalog
 
+<span style="color:#ff5a36;font-weight:600">WHAT KEYTIDE DOES, WITHOUT FLUFF</span>
+
 Last updated: July 13, 2026
 
-KeyTide is a local-first desktop application for protecting individual files with authenticated encryption and a separate unlock key. Version 1 is intentionally small and auditable. Advanced carrier files, passphrases, sanitization, and cloud-related concepts are reserved for a future version of the container format.
+KeyTide is a local-first desktop application for protecting individual files with authenticated encryption and a separate unlock key. Version 1 is intentionally small and auditable: one file, one fresh key, zero accounts. Advanced carrier files, passphrases, sanitization, and cloud-related concepts are reserved for a future version of the container format — the boundary between "now" and "later" is a hard line, not a blur.
 
 ## Version 1: implemented features
+
+<span style="color:#56802f;font-weight:600">SHIPPED AND TESTED</span>
 
 ### Local file protection
 
@@ -124,6 +128,8 @@ KeyTide is a local-first desktop application for protecting individual files wit
 
 ## Version 1: deliberate limitations
 
+<span style="color:#626a62;font-weight:600">HONEST ABOUT WHAT V1 ISN'T</span>
+
 - Protects one file per container; folders and archives are not constructed automatically.
 - Loads a complete file into memory because chunked encryption is outside the v1 format.
 - Does not pad containers, so encrypted size approximates plaintext size.
@@ -135,6 +141,8 @@ KeyTide is a local-first desktop application for protecting individual files wit
 - Has automated verification but has not yet been represented as independently audited cryptographic software.
 
 ## Version 2: specified for review, not implemented
+
+<span style="color:#d43c1d;font-weight:600">DESIGNED ON PAPER, NOT YET IN CODE</span>
 
 These features are now defined in the [v2 format review draft](coffer-format-v2.md) and assessed in the [threat model](threat-model.md). They remain outside the production application until independent review, test vectors, fuzzing, resource limits, and cross-platform tests satisfy the documented release gate.
 

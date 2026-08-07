@@ -1,6 +1,8 @@
 # Changelog
 
-All notable changes to KeyTide are recorded here. The project follows semantic versioning once tagged releases begin.
+<span style="color:#56802f">Every meaningful change to KeyTide, recorded so you never have to guess what shipped.</span>
+
+The project follows semantic versioning once tagged releases begin.
 
 ## Unreleased
 
