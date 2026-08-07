@@ -1,12 +1,10 @@
 # Product roadmap
 
-<span style="color:#56802f;font-weight:600">WHERE KEYTIDE IS HEADED</span>
-
-This roadmap separates interface work from cryptographic implementation. Security-sensitive milestones require format fixtures, negative tests, and review before the UI presents them as production-ready — no feature gets a checkbox just because it sounds cool. The order matters more than the speed.
+This roadmap separates interface work from cryptographic implementation. Security-sensitive milestones require format fixtures, negative tests, and review before the UI presents them as production-ready.
 
 ## Milestone 1: Desktop interface
 
-Status: <span style="color:#235a20;font-weight:600">released in v1.0.0</span>
+Status: released in v1.0.0
 
 - Complete responsive Protect and Open workflows.
 - Maintain clear light and dark themes, keyboard navigation, and accessible contrast.
@@ -15,7 +13,7 @@ Status: <span style="color:#235a20;font-weight:600">released in v1.0.0</span>
 
 ## Milestone 2: KeyTide format v1
 
-Status: <span style="color:#235a20;font-weight:600">released in v1.0.0</span>
+Status: released in v1.0.0
 
 - Implement the versioned `.coffer` container and separate key format defined in [coffer-format-v1.md](coffer-format-v1.md).
 - Encrypt content and authenticated filename metadata with AES-256-GCM.
@@ -28,7 +26,7 @@ Status: <span style="color:#235a20;font-weight:600">released in v1.0.0</span>
 
 ## Milestone 3: KeyTide v1 release
 
-Status: <span style="color:#235a20;font-weight:600">released in v1.0.0</span>
+Status: released in v1.0.0
 
 - Keep v1 deliberately small: one protected file, one separate key, local processing, and explicit destination selection.
 - Replace the generic `.key` extension with `.cofferkey` while retaining a versioned binary format.
@@ -39,7 +37,7 @@ Status: <span style="color:#235a20;font-weight:600">released in v1.0.0</span>
 
 ## V1 maintenance and usability
 
-Status: <span style="color:#8eaa5c;font-weight:600">planned follow-up work</span>
+Status: planned follow-up work
 
 - Replace the time-based processing animation with real byte-level progress reported by the background worker for both protection and restoration.
 - Calculate progress from bytes read, encrypted or authenticated, and safely written instead of advancing cosmetically to 90% and waiting there.
@@ -49,7 +47,7 @@ Status: <span style="color:#8eaa5c;font-weight:600">planned follow-up work</span
 
 ## Milestone 4: KeyTide format v2 advanced privacy
 
-Status: <span style="color:#ff5a36;font-weight:600">format and threat-model draft complete; independent review and implementation required</span>
+Status: format and threat-model draft complete; independent review and implementation required
 
 Version 2 introduces key carriers and optional metadata sanitization. Neither feature may change the v1 parser or be silently enabled for a v1 container.
 
