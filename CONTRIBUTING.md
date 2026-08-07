@@ -1,6 +1,6 @@
 # Contributing to KeyTide
 
-Thanks for wanting to improve KeyTide. The project stays honest only because people read it carefully — cryptography, parsing, key handling, filesystem commits, and container compatibility get extra scrutiny for a reason. If you're here to help make that stronger, welcome aboard.
+Thank you for helping improve KeyTide. Changes to cryptography, parsing, key handling, filesystem commits, or container compatibility require especially careful review and tests.
 
 ## Before opening a change
 

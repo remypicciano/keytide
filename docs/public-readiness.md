@@ -1,12 +1,8 @@
 # Public repository readiness
 
-<span style="color:#56802f;font-weight:600">THE CHECKS THAT HAPPEN BEFORE SOMETHING GOES LIVE</span>
-
 Last reviewed: July 13, 2026
 
 ## Completed
-
-<span style="color:#235a20;font-weight:600">DONE, AND VERIFIED</span>
 
 - Full reachable Git history scanned with Gitleaks 8.30.1: 23 commits, no leaks found.
 - Tracked-path audit found no local AI-assistant configuration, instruction files, keys, containers, environment files, or private-key files.

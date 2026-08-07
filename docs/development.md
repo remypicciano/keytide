@@ -1,9 +1,5 @@
 # Development notes
 
-<span style="color:#56802f;font-weight:600">FOR PEOPLE WHO LIKE CLEAN COMMITS</span>
-
-These are the house rules that keep the repository boring in the right way: no assistant config sneaking in, no generated noise, no surprises in a diff. If a change can't survive this checklist, it isn't ready for review.
-
 ## Repository hygiene
 
 Local AI-assistant configuration, instructions, prompts, and session metadata are intentionally excluded from this repository. The root `.gitignore` covers the known local tool directories and instruction files.
@@ -42,8 +38,6 @@ git commit -m "Stop tracking local assistant configuration"
 Repeat the removal command for each path printed by `git ls-files`. This affects Git's index without deleting the local file.
 
 ## Preparing a GitHub change
-
-<span style="color:#ff5a36;font-weight:600">BRANCH. FIX. PROVE IT.</span>
 
 Feature work should be committed on a focused branch rather than directly on `main`. Name branches by purpose, for example:
 
