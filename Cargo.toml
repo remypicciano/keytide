@@ -9,16 +9,16 @@ description = "Local-first authenticated file protection for the desktop"
 
 [dependencies]
 # Feature-unifies with aes-gcm's backend so expanded AES round keys are wiped on drop.
-aes = { version = "0.8", features = ["zeroize"] }
-aes-gcm = { version = "0.10", features = ["zeroize"] }
-eframe = { version = "0.34", default-features = false, features = [
+aes = { version = "0.9", features = ["zeroize"] }
+aes-gcm = { version = "0.11", features = ["zeroize"] }
+eframe = { version = "0.36", default-features = false, features = [
     "accesskit",
     "default_fonts",
     "glow",
     "x11",
 ] }
-egui = "0.34"
-egui_extras = { version = "0.34", features = ["all_loaders"] }
+egui = "0.36"
+egui_extras = { version = "0.36", features = ["all_loaders"] }
 getrandom = "0.4"
 rfd = { version = "0.17", default-features = false, features = ["xdg-portal"] }
 thiserror = "2"
